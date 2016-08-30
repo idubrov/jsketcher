@@ -1,5 +1,5 @@
 
-TCAD.math.vec = function(size) {
+function vec(size) {
   var out = [];
   out.length = size;
   for (var i = 0; i < size; ++i) {
@@ -9,14 +9,13 @@ TCAD.math.vec = function(size) {
 };
 
 
-TCAD.math.Arrays_fill = function(a, fromIndex, toIndex,val) {
+ function Arrays_fill(a, fromIndex, toIndex,val) {
   for (var i = fromIndex; i < toIndex; i++)
     a[i] = val;
 };
 
 /** @constructor */
-TCAD.math.QR = function(matrix) {
-  var vec = TCAD.math.vec;
+function QR(matrix) {
   this.matrix = matrix;
   var nR = this.matrix.length;
   var nC = nR == 0 ? 0 : this.matrix[0].length;
@@ -34,7 +33,7 @@ TCAD.math.QR = function(matrix) {
   var akk;
   var j;
   var i;
-  
+
   // initializations
   for (k = 0; k < nC; ++k) {
     this.permutation[k] = k;
@@ -99,7 +98,7 @@ TCAD.math.QR = function(matrix) {
   this.rank = this.solvedCols;
 };
 
-TCAD.math.QR.prototype.qTy = function(y) {
+QR.prototype.qTy = function(y) {
   var nR = this.matrix.length;
   var nC = this.matrix[0].length;
 
@@ -116,18 +115,18 @@ TCAD.math.QR.prototype.qTy = function(y) {
   }
 };
 
-TCAD.math.QR.prototype.solve = function(qy) {
+QR.prototype.solve = function(qy) {
 
   var nR = this.matrix.length;
   var nC = this.matrix[0].length;
 
   var vec = TCAD.math.vec;
-  
+
   var diag = vec(nC);
   var lmDiag = vec(nC);
   var work = vec(nC);
   var out =  vec(nC);
-  
+
   // copy R and Qty to preserve input and initialize s
   //  in particular, save the diagonal elements of R in lmDir
   for (var j = 0; j < this.solvedCols; ++j) {
@@ -226,3 +225,5 @@ TCAD.math.QR.prototype.solve = function(qy) {
   }
   return out;
 };
+
+export default QR;

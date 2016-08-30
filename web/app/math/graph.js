@@ -1,12 +1,12 @@
+import struct from '../3d/hashmap';
+
+const graph = {};
 
 
-TCAD.graph = {};
-
-
-TCAD.graph.findAllLoops = function(graph, hashCode, equals) {
+graph.findAllLoops = function(graph, hashCode, equals) {
 
   var loops = [];
-  var visited = new TCAD.struct.HashTable(hashCode, equals);
+  var visited = new struct.HashTable(hashCode, equals);
   function step(vertex, comesFrom, path) {
     var i;
     visited.put(vertex, true);
@@ -97,7 +97,7 @@ TCAD.graph.findAllLoops = function(graph, hashCode, equals) {
 };
 
 /** @constructor */
-TCAD.graph.Graph = function(data) {
+graph.Graph = function(data) {
 
   this.connections = function(e) {
     return data[e];
@@ -112,7 +112,7 @@ TCAD.graph.Graph = function(data) {
   };
 };
 
-TCAD.graph.test = function() {
+graph.test = function() {
   var data = [
     [],
     [2],
@@ -126,11 +126,11 @@ TCAD.graph.test = function() {
     [2, 4]
   ];
 
-  var graph = new TCAD.graph.Graph(data);
-  console.log(TCAD.graph.findAllLoops(graph));
+  var graph = new graph.Graph(data);
+  console.log(graph.findAllLoops(graph));
 };
 
-TCAD.graph.test0 = function() {
+graph.test0 = function() {
   var data = [
     [3, 1],
     [0, 2, 8],
@@ -143,6 +143,8 @@ TCAD.graph.test0 = function() {
     [1, 7]
   ];
 
-  var graph = new TCAD.graph.Graph(data);
-  console.log(TCAD.graph.findAllLoops(graph));
+  var graph = new graph.Graph(data);
+  console.log(graph.findAllLoops(graph));
 };
+
+export default graph;

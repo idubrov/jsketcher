@@ -1,4 +1,7 @@
-optim = {};
+import numeric from 'numeric';
+import math from './math';
+
+const optim = {};
 
 optim.DEBUG_HANDLER = function() {};
 
@@ -286,8 +289,8 @@ optim.dog_leg = function (subsys, rough) {
     return new optim._result(0, 0, 1);
   }
 
-  var vec = TCAD.math._arr;
-  var mx = TCAD.math._matrix;
+  var vec = math._arr;
+  var mx = math._matrix;
 
   var n = numeric;
 
@@ -387,7 +390,7 @@ optim.dog_leg = function (subsys, rough) {
           hitBoundary = true;
         } else {
           var h_sd = n.mul(g, - alpha);
-          if (isNaN(gnNorm)) { 
+          if (isNaN(gnNorm)) {
             h_dl = h_sd;
           } else {
 
@@ -404,7 +407,7 @@ optim.dog_leg = function (subsys, rough) {
             // and update h_dl and dL with beta
             h_dl = n.add(h_sd, n.mul(beta, d));
             hitBoundary = true;
-          } 
+          }
         }
       }
     }
@@ -418,8 +421,8 @@ optim.dog_leg = function (subsys, rough) {
 
     if (returnCode != 0) {
       break;
-    } 
-    
+    }
+
     x_new = n.add(x, h_dl);
     subsys.setParams(x_new);
     var err_new = subsys.calcResidual(fx_new);
@@ -509,3 +512,5 @@ optim.cg = function(A, x, b, tol, maxIt) {
 //  console.log("liner problem solved in " + i);
   return x;
 };
+
+export default optim;

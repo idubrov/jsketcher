@@ -1,6 +1,11 @@
-TCAD.math = {};
+import { Vector, Matrix } from './vector';
+import QR from './qr';
 
-TCAD.math._arr = function(size) {
+const math = {
+  QR: QR
+};
+
+math._arr = function(size) {
   var out = [];
   out.length = size;
   for (var i = 0; i < size; ++i) {
@@ -9,54 +14,54 @@ TCAD.math._arr = function(size) {
   return out;
 };
 
-TCAD.math._matrix = function(m, n) {
+math._matrix = function(m, n) {
   var out = [];
   out.length = m;
   for (var i = 0; i < m; ++i) {
-    out[i] = TCAD.math._arr(n);
+    out[i] = math._arr(n);
   }
   return out;
 };
 
-TCAD.math.distanceAB = function(a, b) {
-  return TCAD.math.distance(a.x, a.y, b.x, b.y);
+math.distanceAB = function(a, b) {
+  return math.distance(a.x, a.y, b.x, b.y);
 };
-  
-TCAD.math.distance = function(x1, y1, x2, y2) {
+
+math.distance = function(x1, y1, x2, y2) {
   var dx = x1 - x2;
   var dy = y1 - y2;
   return Math.sqrt(dx * dx + dy * dy);
 };
 
-TCAD.math.distanceAB3 = function(a, b) {
-  return TCAD.math.distance3(a.x, a.y, a.z, b.x, b.y, b.z);
+math.distanceAB3 = function(a, b) {
+  return math.distance3(a.x, a.y, a.z, b.x, b.y, b.z);
 };
 
-TCAD.math.distance3 = function(x1, y1, z1, x2, y2, z2) {
+math.distance3 = function(x1, y1, z1, x2, y2, z2) {
   var dx = x1 - x2;
   var dy = y1 - y2;
   var dz = z1 - z2;
   return Math.sqrt(dx * dx + dy * dy + dz * dz);
 };
 
-TCAD.math.ORIGIN = new TCAD.Vector(0, 0, 0);
+math.ORIGIN = new Vector(0, 0, 0);
 
-TCAD.math.AXIS = {
-  X : new TCAD.Vector(1, 0, 0),
-  Y : new TCAD.Vector(0, 1, 0),
-  Z : new TCAD.Vector(0, 0, 1)
+math.AXIS = {
+  X : new Vector(1, 0, 0),
+  Y : new Vector(0, 1, 0),
+  Z : new Vector(0, 0, 1)
 };
 
-TCAD.math.IDENTITY_BASIS = [TCAD.math.AXIS.X, TCAD.math.AXIS.Y, TCAD.math.AXIS.Z];
+math.IDENTITY_BASIS = [math.AXIS.X, math.AXIS.Y, math.AXIS.Z];
 
-TCAD.math.rotateMatrix = function(angle, axis, pivot) {
+math.rotateMatrix = function(angle, axis, pivot) {
   var sin = Math.sin(angle);
   var cos = Math.cos(angle);
   var axisX, axisY, axisZ;
-  var m = new TCAD.Matrix();
+  var m = new Matrix();
 
-  var AXIS = TCAD.math.AXIS;
-  
+  var AXIS = math.AXIS;
+
   if (axis === AXIS.X || axis === AXIS.Y || axis === AXIS.Z) {
     axisX = axis.x;
     axisY = axis.y;
@@ -96,8 +101,8 @@ TCAD.math.rotateMatrix = function(angle, axis, pivot) {
   return m;
 };
 
-TCAD.math.circleFromPoints = function(p1, p2, p3) {
-  var center = new TCAD.Vector();
+math.circleFromPoints = function(p1, p2, p3) {
+  var center = new Vector();
   var offset = p2.x*p2.x + p2.y*p2.y;
   var bc =   ( p1.x*p1.x + p1.y*p1.y - offset )/2.0;
   var cd =   (offset - p3.x*p3.x - p3.y*p3.y)/2.0;
@@ -112,10 +117,12 @@ TCAD.math.circleFromPoints = function(p1, p2, p3) {
   return center;
 };
 
-TCAD.math.norm2 = function(vec) {
+math.norm2 = function(vec) {
   var sq = 0;
   for (var i = 0; i < vec.length; i++) {
     sq += vec[i] * vec[i];
   }
-  return Math.sqrt(sq);  
+  return Math.sqrt(sq);
 };
+
+export default math;

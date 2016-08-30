@@ -1,34 +1,38 @@
+import { SketchObject, utils, EndPoint } from '../canvas';
+import math from '../../math/math';
+import { Vector } from '../../math/vector';
+
 /** @constructor */
-TCAD.TWO.LinearDimension = function(a, b) {
-  TCAD.TWO.SketchObject.call(this);
+function LinearDimension(a, b) {
+  SketchObject.call(this);
   this.a = a;
   this.b = b;
   this.flip = false;
 };
 
-TCAD.TWO.utils.extend(TCAD.TWO.LinearDimension, TCAD.TWO.SketchObject);
+utils.extend(LinearDimension, SketchObject);
 
-TCAD.TWO.LinearDimension.prototype.collectParams = function(params) {
+LinearDimension.prototype.collectParams = function(params) {
 };
 
-TCAD.TWO.LinearDimension.prototype.getReferencePoint = function() {
+LinearDimension.prototype.getReferencePoint = function() {
   return this.a;
 };
 
-TCAD.TWO.LinearDimension.prototype.translateImpl = function(dx, dy) {
+LinearDimension.prototype.translateImpl = function(dx, dy) {
 };
 
-TCAD.TWO.LinearDimension.prototype.getA = function() { return this.a };
-TCAD.TWO.LinearDimension.prototype.getB = function() { return this.b };
+LinearDimension.prototype.getA = function() { return this.a };
+LinearDimension.prototype.getB = function() { return this.b };
 
-TCAD.TWO.LinearDimension.getTextOff = function(scale) {
+LinearDimension.getTextOff = function(scale) {
   return 3 * scale;
 };
 
-TCAD.TWO.LinearDimension.prototype.drawImpl = function(ctx, scale, viewer) {
+LinearDimension.prototype.drawImpl = function(ctx, scale, viewer) {
 
   var off = 30 * viewer.dimScale;
-  var textOff = TCAD.TWO.LinearDimension.getTextOff(viewer.dimScale);
+  var textOff = LinearDimension.getTextOff(viewer.dimScale);
 
   var a, b, startA, startB;
   if (this.flip) {
@@ -42,8 +46,8 @@ TCAD.TWO.LinearDimension.prototype.drawImpl = function(ctx, scale, viewer) {
     startA = this.a;
     startB = this.b;
   }
-  
-  var d = TCAD.math.distanceAB(a, b);
+
+  var d = math.distanceAB(a, b);
 
   var _vx = - (b.y - a.y);
   var _vy = b.x - a.x;
@@ -67,10 +71,10 @@ TCAD.TWO.LinearDimension.prototype.drawImpl = function(ctx, scale, viewer) {
 
 
   function drawRef(start, x, y) {
-    var vec = new TCAD.Vector(x - start.x, y - start.y);
+    var vec = new Vector(x - start.x, y - start.y);
     vec._normalize();
     vec._multiply(7 * viewer.dimScale);
-    
+
     ctx.moveTo(start.x, start.y );
     ctx.lineTo(x, y);
     ctx.lineTo(x + vec.x, y + vec.y);
@@ -112,81 +116,81 @@ TCAD.TWO.LinearDimension.prototype.drawImpl = function(ctx, scale, viewer) {
   }
 };
 
-TCAD.TWO.LinearDimension.prototype.normalDistance = function(aim) {
+LinearDimension.prototype.normalDistance = function(aim) {
   return -1;
 };
 
 /** @constructor */
-TCAD.TWO.Dimension = function(a, b) {
-  TCAD.TWO.LinearDimension.call(this, a, b);
+function Dimension(a, b) {
+  LinearDimension.call(this, a, b);
 };
 
-TCAD.TWO.utils.extend(TCAD.TWO.Dimension, TCAD.TWO.LinearDimension);
+utils.extend(Dimension, LinearDimension);
 
-TCAD.TWO.Dimension.prototype._class = 'TCAD.TWO.Dimension';
+Dimension.prototype._class = 'TCAD.TWO.Dimension';
 
 /** @constructor */
-TCAD.TWO.HDimension = function(a, b) {
-  TCAD.TWO.LinearDimension.call(this, a, b);
+function HDimension(a, b) {
+  LinearDimension.call(this, a, b);
 };
 
-TCAD.TWO.utils.extend(TCAD.TWO.HDimension, TCAD.TWO.LinearDimension);
+utils.extend(HDimension, LinearDimension);
 
-TCAD.TWO.HDimension.prototype._class = 'TCAD.TWO.HDimension';
+HDimension.prototype._class = 'TCAD.TWO.HDimension';
 
-TCAD.TWO.HDimension.prototype.getA = function() { return this.a };
-TCAD.TWO.HDimension.prototype.getB = function() { return {x : this.b.x, y : this.a.y} };
+HDimension.prototype.getA = function() { return this.a };
+HDimension.prototype.getB = function() { return {x : this.b.x, y : this.a.y} };
 
 /** @constructor */
-TCAD.TWO.VDimension = function(a, b) {
-  TCAD.TWO.LinearDimension.call(this, a, b);
+function VDimension(a, b) {
+  LinearDimension.call(this, a, b);
 };
 
-TCAD.TWO.utils.extend(TCAD.TWO.VDimension, TCAD.TWO.LinearDimension);
+utils.extend(VDimension, LinearDimension);
 
-TCAD.TWO.VDimension.prototype._class = 'TCAD.TWO.VDimension';
+VDimension.prototype._class = 'TCAD.TWO.VDimension';
 
-TCAD.TWO.VDimension.prototype.getA = function() { return this.a };
-TCAD.TWO.VDimension.prototype.getB = function() { return {x : this.a.x, y : this.b.y} };
+VDimension.prototype.getA = function() { return this.a };
+VDimension.prototype.getB = function() { return {x : this.a.x, y : this.b.y} };
 
 
 /** @constructor */
-TCAD.TWO.DiameterDimension = function(obj) {
-  TCAD.TWO.SketchObject.call(this);
+function DiameterDimension(obj) {
+  SketchObject.call(this);
   this.obj = obj;
   this.angle = Math.PI / 4;
 };
 
-TCAD.TWO.DiameterDimension.prototype._class = 'TCAD.TWO.DiameterDimension';
+DiameterDimension.prototype._class = 'TCAD.TWO.DiameterDimension';
 
-TCAD.TWO.utils.extend(TCAD.TWO.DiameterDimension, TCAD.TWO.SketchObject);
+utils.extend(DiameterDimension, SketchObject);
 
-TCAD.TWO.DiameterDimension.prototype.collectParams = function(params) {
+DiameterDimension.prototype.collectParams = function(params) {
 };
 
-TCAD.TWO.DiameterDimension.prototype.getReferencePoint = function() {
-  
+DiameterDimension.prototype.getReferencePoint = function() {
+
 };
 
-TCAD.TWO.DiameterDimension.prototype.translateImpl = function(dx, dy) {
+DiameterDimension.prototype.translateImpl = function(dx, dy) {
 };
 
-TCAD.TWO.DiameterDimension.prototype.drawImpl = function(ctx, scale, viewer) {
+DiameterDimension.prototype.drawImpl = function(ctx, scale, viewer) {
   if (this.obj == null) return;
   if (this.obj._class === 'TCAD.TWO.Circle') {
-    this.drawForCircle(ctx, scale, viewer);  
-  } else if (this.obj._class === 'TCAD.TWO.Arc') { 
+    this.drawForCircle(ctx, scale, viewer);
+  } else if (this.obj._class === 'TCAD.TWO.Arc') {
     this.drawForArc(ctx, scale, viewer);
   }
 };
 
-TCAD.TWO.DiameterDimension.prototype.drawForCircle = function(ctx, scale, viewer) {
-  var c = new TCAD.Vector().setV(this.obj.c);
+DiameterDimension.prototype.drawForCircle = function(ctx, scale, viewer) {
+  var c = new Vector().setV(this.obj.c);
   var r = this.obj.r.get();
-  var angled = new TCAD.Vector(r * Math.cos(this.angle), r * Math.sin(this.angle), 0);
+  var angled = new Vector(r * Math.cos(this.angle), r * Math.sin(this.angle), 0);
   var a = c.minus(angled);
   var b = c.plus(angled);
-  var textOff = TCAD.TWO.LinearDimension.getTextOff(viewer.dimScale);
+  var textOff = LinearDimension.getTextOff(viewer.dimScale);
 
   var d = 2 * r;
 
@@ -200,8 +204,8 @@ TCAD.TWO.DiameterDimension.prototype.drawForCircle = function(ctx, scale, viewer
   ctx.font = (fontSize) + "px Arial";
   var txt = String.fromCharCode(216) + ' ' + d.toFixed(2);
   var textWidth = ctx.measureText(txt).width;
-  var h = d / 2 - textWidth / 2; 
-  
+  var h = d / 2 - textWidth / 2;
+
   var _vx = - (b.y - a.y);
   var _vy = b.x - a.x;
 
@@ -232,14 +236,14 @@ TCAD.TWO.DiameterDimension.prototype.drawForCircle = function(ctx, scale, viewer
     ctx.closePath();
     ctx.stroke();
     angled._multiply(off);
-    
+
     var tx = (b.x + _vxn * textOff) + angled.x;
     var ty = (b.y + _vyn * textOff) + angled.y;
     drawText(tx, ty);
   }
 };
 
-TCAD.TWO.DiameterDimension.prototype.drawForArc = function(ctx, scale, viewer) {
+DiameterDimension.prototype.drawForArc = function(ctx, scale, viewer) {
 
   var r = this.obj.distanceA();
 
@@ -260,7 +264,7 @@ TCAD.TWO.DiameterDimension.prototype.drawForArc = function(ctx, scale, viewer) {
     }
   }
 
-  var vertOff = TCAD.TWO.LinearDimension.getTextOff(viewer.dimScale);
+  var vertOff = LinearDimension.getTextOff(viewer.dimScale);
   var horOff = 5 * viewer.dimScale;
 
   var fontSize = 12 * viewer.dimScale;
@@ -288,25 +292,25 @@ TCAD.TWO.DiameterDimension.prototype.drawForArc = function(ctx, scale, viewer) {
   ctx.restore();
 };
 
-TCAD.TWO.DiameterDimension.prototype.normalDistance = function(aim) {
+DiameterDimension.prototype.normalDistance = function(aim) {
   return -1;
 };
 
 /** @constructor */
-TCAD.TWO.AddDimTool = function(viewer, layer, dimCreation) {
+function AddDimTool(viewer, layer, dimCreation) {
   this.viewer = viewer;
   this.layer = layer;
   this.dim = null;
-  this._v = new TCAD.Vector(0, 0, 0);
+  this._v = new Vector(0, 0, 0);
   this.dimCreation = dimCreation;
 };
 
-TCAD.TWO.AddDimTool.prototype.keydown = function(e) {};
-TCAD.TWO.AddDimTool.prototype.keypress = function(e) {};
-TCAD.TWO.AddDimTool.prototype.keyup = function(e) {};
-TCAD.TWO.AddDimTool.prototype.cleanup = function(e) {};
+AddDimTool.prototype.keydown = function(e) {};
+AddDimTool.prototype.keypress = function(e) {};
+AddDimTool.prototype.keyup = function(e) {};
+AddDimTool.prototype.cleanup = function(e) {};
 
-TCAD.TWO.AddDimTool.prototype.mousemove = function(e) {
+AddDimTool.prototype.mousemove = function(e) {
   var p = this.viewer.screenToModel(e);
   this.viewer.snap(p.x, p.y, []);
   if (this.dim != null) {
@@ -316,7 +320,7 @@ TCAD.TWO.AddDimTool.prototype.mousemove = function(e) {
   this.viewer.refresh();
 };
 
-TCAD.TWO.AddDimTool.prototype.mouseup = function(e) {
+AddDimTool.prototype.mouseup = function(e) {
 
   if (e.button > 0 && this.dim != null) {
     this.dim.flip = !this.dim.flip;
@@ -333,7 +337,7 @@ TCAD.TWO.AddDimTool.prototype.mouseup = function(e) {
 
   if (this.dim == null) {
     this.viewer.historyManager.checkpoint();
-    this.dim = this.dimCreation(p, new TCAD.TWO.EndPoint(p.x, p.y));
+    this.dim = this.dimCreation(p, new EndPoint(p.x, p.y));
     this.layer.objects.push(this.dim);
     this.viewer.refresh();
   } else {
@@ -343,35 +347,35 @@ TCAD.TWO.AddDimTool.prototype.mouseup = function(e) {
   }
 };
 
-TCAD.TWO.AddDimTool.prototype.mousedown = function(e) {
+AddDimTool.prototype.mousedown = function(e) {
 };
 
-TCAD.TWO.AddDimTool.prototype.mousewheel = function(e) {
+AddDimTool.prototype.mousewheel = function(e) {
 };
 
 /** @constructor */
-TCAD.TWO.AddCircleDimTool = function(viewer, layer) {
+function AddCircleDimTool(viewer, layer) {
   this.viewer = viewer;
   this.layer = layer;
-  this.dim = new TCAD.TWO.DiameterDimension(null);
+  this.dim = new DiameterDimension(null);
   this.viewer.add(this.dim, this.layer);
 };
 
-TCAD.TWO.AddCircleDimTool.prototype.keydown = function(e) {};
-TCAD.TWO.AddCircleDimTool.prototype.keypress = function(e) {};
-TCAD.TWO.AddCircleDimTool.prototype.keyup = function(e) {};
-TCAD.TWO.AddCircleDimTool.prototype.cleanup = function(e) {};
+AddCircleDimTool.prototype.keydown = function(e) {};
+AddCircleDimTool.prototype.keypress = function(e) {};
+AddCircleDimTool.prototype.keyup = function(e) {};
+AddCircleDimTool.prototype.cleanup = function(e) {};
 
-TCAD.TWO.AddCircleDimTool.prototype.mousemove = function(e) {
+AddCircleDimTool.prototype.mousemove = function(e) {
   var p = this.viewer.screenToModel(e);
   var objects = this.viewer.search(p.x, p.y, 20 / this.viewer.scale, true, false, []).filter(function(o) {
-    return o._class === 'TCAD.TWO.Circle' || o._class === 'TCAD.TWO.Arc'; 
+    return o._class === 'TCAD.TWO.Circle' || o._class === 'TCAD.TWO.Arc';
   });
-  
+
   if (objects.length != 0) {
     this.dim.obj = objects[0];
   } else {
-    this.dim.obj = null; 
+    this.dim.obj = null;
   }
   if (this.dim.obj != null) {
     this.dim.angle = Math.atan2(p.y - this.dim.obj.c.y, p.x - this.dim.obj.c.x);
@@ -379,7 +383,7 @@ TCAD.TWO.AddCircleDimTool.prototype.mousemove = function(e) {
   this.viewer.refresh();
 };
 
-TCAD.TWO.AddCircleDimTool.prototype.mouseup = function(e) {
+AddCircleDimTool.prototype.mouseup = function(e) {
   if (this.dim.obj !== null) {
     this.viewer.historyManager.checkpoint();
   } else {
@@ -388,8 +392,11 @@ TCAD.TWO.AddCircleDimTool.prototype.mouseup = function(e) {
   this.viewer.toolManager.releaseControl();
 };
 
-TCAD.TWO.AddCircleDimTool.prototype.mousedown = function(e) {
+AddCircleDimTool.prototype.mousedown = function(e) {
 };
 
-TCAD.TWO.AddCircleDimTool.prototype.mousewheel = function(e) {
+AddCircleDimTool.prototype.mousewheel = function(e) {
 };
+
+
+export { LinearDimension, Dimension, HDimension, VDimension, DiameterDimension, AddDimTool, AddCircleDimTool };
